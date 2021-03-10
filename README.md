@@ -20,7 +20,7 @@ This repository contains Arduino code for many basic mechatronics functions
 #### LEDSwitch
    * Turns and LED on when a switch is pressed
    
-##SevSeg-Master
+## SevSeg-Master
    *Zip file containing SevSeg to use shift register in CountUp Programs, this version is new as of 3/9/21
    *Newest version can be found at `https://github.com/DeanIsMe/SevSeg`
 
