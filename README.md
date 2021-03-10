@@ -19,6 +19,11 @@ This repository contains Arduino code for many basic mechatronics functions
    * Fades an LED in and out with a pause in between
 #### LEDSwitch
    * Turns and LED on when a switch is pressed
+   
+##SevSeg-Master
+   *Zip file containing SevSeg to use shift register in CountUp Programs, this version is new as of 3/9/21
+   *Newest version can be found at `https://github.com/DeanIsMe/SevSeg`
+
 # Git Command
 `git clone https://github.com/DroTron/Mechatronics-Arduino-Code`
 *  Clones entire repository
