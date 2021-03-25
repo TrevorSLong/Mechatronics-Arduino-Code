@@ -1,5 +1,7 @@
 # Mechatronics-Arduino-Code
-This repository contains Arduino code for many basic mechatronics functions
+This repository contains Arduino code for many basic mechatronics functions that were used in my mechatronics class. Do not use this code to cheat on your own projects if you are taking this course.
+
+![alt text](https://github.com/DroTron/Mechatronics-Arduino-Code/tree/master/LCDDisplayTemperature/PictureOfWiring.JPG)
 
 ## Included Programs
 
@@ -19,6 +21,8 @@ This repository contains Arduino code for many basic mechatronics functions
    * Fades an LED in and out with a pause in between
 #### LEDSwitch
    * Turns and LED on when a switch is pressed
+#### LCDDisplayTemperature
+   * Measures the temperature with a thermistor and outputs the reading to an LCD display, button toggles between F and C. PDF instructions included
    
 ## SevSeg-Master
    * Zip file containing SevSeg to use shift register in CountUp Programs, this version is new as of 3/9/21
