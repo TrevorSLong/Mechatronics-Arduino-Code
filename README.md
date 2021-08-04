@@ -1,7 +1,7 @@
 # Mechatronics-Arduino-Code
 This repository contains Arduino code for many basic mechatronics functions that were used in my mechatronics class. Do not use this code to cheat on your own projects if you are taking this course.
 
-  ![Picture of wiring from LCDDisplayTemperature](https://raw.githubusercontent.com/DroTron/Mechatronics-Arduino-Code/master/LCDDisplayTemperature/PictureOfWiring.jpg)
+  ![Picture of wiring from LCDDisplayTemperature](https://raw.githubusercontent.com/TrevorSLong/Mechatronics-Arduino-Code/master/LCDDisplayTemperature/PictureOfWiring.jpg)
   
 ## Included Programs
 
@@ -29,8 +29,8 @@ This repository contains Arduino code for many basic mechatronics functions that
    * Newest version can be found at `https://github.com/DeanIsMe/SevSeg`
 
 # Git Command
-`git clone https://github.com/DroTron/Mechatronics-Arduino-Code`
+`git clone https://github.com/TrevorSLong/Mechatronics-Arduino-Code`
 *  Clones entire repository
 *  add `~/FOLDER/SUBFOLDER` after PROGRAM.m to clone to specific folder
-   * Ex: `git clone https://github.com/DroTron/Mechatronics-Arduino-Code ~/Mechatronics-Arduino-Code`
+   * Ex: `git clone https://github.com/TrevorSLong/Mechatronics-Arduino-Code ~/Mechatronics-Arduino-Code`
    * to clone repository to a folder in home named Mechatronics-Arduino-Code
