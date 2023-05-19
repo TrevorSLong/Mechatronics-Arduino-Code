@@ -21,9 +21,15 @@ boolean takeLowTime;
 int PIRValue = 0;
 int PIRResult = 0;
 bool motion = 0;
+bool motionLast = 0;
+int motioncount = 0;
+bool absent = 0;
 
 //LCD initialization
 LiquidCrystal lcd(4, 6, 10, 11, 12, 13);
+
+//cyclic initialization
+int tempTimer = 0;
 
 void setup() {
   Serial.begin(9600); // Begin serial communication at a baud rate of 9600:
@@ -37,12 +43,43 @@ void setup() {
 }
 
 void loop() {
-  delay(2000);
-  h = getHumidity();
-  hif = getHeatIndex();
+  delay(200); //makes this routine run at 50ms
+  tempTimer = tempTimer + 1;
+  if (tempTimer == 25){
+    h = getHumidity();
+    hif = getHeatIndex();
+  }
+
   motion = PIRSensor();
 
-  if ((h != 0) && (hif != 0)) {
+  if(motion == 0 and motionLast == motion){
+    motioncount = motioncount + 1;
+  }
+  else if(motion == 1 and motionLast == motion){
+    motioncount = motioncount + 1;
+  }
+  else{
+    motioncount = 0;
+  }
+
+  if ((motionLast != motion) && (motion == 1) && absent == 1){
+    lcd.clear();
+    lcd.home();
+    lcd.print("Welcome Back.");
+    Serial.print("Welcome Back");
+    motioncount = 0;
+    absent  = 0;
+    delay(3000);
+  }
+  else if ((motion == 0) && motioncount == 300){
+    lcd.clear();
+    lcd.home();
+    lcd.print("Goodbye.");
+    Serial.print("Goodbye");
+    absent = 1;
+    delay(3000);
+  }
+  else if ((h != 0) && (hif != 0) && tempTimer == 50) {
     lcd.clear();
     lcd.home();
     lcd.print("Temp: ");
@@ -62,7 +99,11 @@ void loop() {
     Serial.print(hif);
     Serial.print(" \xC2\xB0");
     Serial.println("F");
+
+    tempTimer = 0;
   }
+
+  motionLast = motion;
 }
 
 float getHumidity() {
@@ -98,12 +139,11 @@ bool PIRSensor() {
          PIRValue = 1;
          lockLow = false;
          Serial.println("Motion detected.");
-         delay(50);
          return 1;
       }
       takeLowTime = true;
    }
-   if(digitalRead(pirPin) == LOW) {
+   else if(digitalRead(pirPin) == LOW) {
       if(takeLowTime){
          lowIn = millis();takeLowTime = false;
       }
@@ -111,7 +151,6 @@ bool PIRSensor() {
          PIRValue = 0;
          lockLow = true;
          Serial.println("Motion ended.");
-         delay(50);
          return 0;
       }
     }
