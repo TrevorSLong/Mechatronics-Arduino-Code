@@ -2,6 +2,7 @@
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
 #include <LiquidCrystal.h>
+#include "RTClib.h"
 
 //DHT initialization
 #define DHTPIN 2 // Set DHT pin
@@ -27,23 +28,35 @@ bool absent = 0;
 
 //LCD initialization
 LiquidCrystal lcd(4, 6, 10, 11, 12, 13);
+int lcdBacklightPin = A0;
 
 //cyclic initialization
 int tempTimer = 0;
+
+//initialize rtc
+RTC_PCF8523 rtc;
+char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+int hour = 0;
+int tod = 1;
 
 void setup() {
   Serial.begin(9600); // Begin serial communication at a baud rate of 9600:
 
   dht.begin(); // Setup DHT sensor
 
+  rtc.begin(); //initialize rtc
+  rtc.start();
+
   lcd.begin(16, 2); //set the type of LCD display
   lcd.print("Please wait.."); //put please wait on the screen while we  wait for the first temp input
+  pinMode(lcdBacklightPin, OUTPUT);
 
   pinMode(pirPin, INPUT); //define the PIR sensor pin as input
 }
 
 void loop() {
   delay(200); //makes this routine run at 50ms
+  DateTime now = rtc.now();
   tempTimer = tempTimer + 1;
   if (tempTimer == 25){
     h = getHumidity();
@@ -69,6 +82,7 @@ void loop() {
     Serial.print("Welcome Back");
     motioncount = 0;
     absent  = 0;
+    tempTimer = 0;
     delay(3000);
   }
   else if ((motion == 0) && motioncount == 300){
@@ -77,6 +91,7 @@ void loop() {
     lcd.print("Goodbye.");
     Serial.print("Goodbye");
     absent = 1;
+    tempTimer = 0;
     delay(3000);
   }
   else if ((h != 0) && (hif != 0) && tempTimer == 50) {
@@ -100,9 +115,72 @@ void loop() {
     Serial.print(" \xC2\xB0");
     Serial.println("F");
 
+    //tempTimer = 0;
+  }
+  else if (tempTimer == 100 || tempTimer == 108 || tempTimer == 116 || tempTimer == 124 || tempTimer == 132 || tempTimer == 140 || tempTimer == 148 || tempTimer == 156 || tempTimer == 164 || tempTimer == 172 || tempTimer == 180 || tempTimer == 188 || tempTimer == 192){
+    Serial.print(now.year(), DEC);
+    Serial.print('/');
+    Serial.print(now.month(), DEC);
+    Serial.print('/');
+    Serial.print(now.day(), DEC);
+    Serial.print(" (");
+    Serial.print(daysOfTheWeek[now.dayOfTheWeek()]);
+    Serial.print(") ");
+    Serial.print(now.hour(), DEC);
+    Serial.print(':');
+    Serial.print(now.minute(), DEC);
+    Serial.print(':');
+    Serial.print(now.second(), DEC);
+    Serial.println();
+
+    if (tempTimer == 100){
+      lcd.clear();
+    }
+    lcd.home();
+    lcd.setCursor(4, 0);
+    //lcd.print("Time: ");
+    if (now.hour() >= 13){
+      hour = now.hour() - 12;
+      tod = 2;
+    }
+    else {
+      tod = 1;
+    }
+    if (now.hour() < 10){
+      lcd.print("0");
+    }
+    lcd.print(hour, DEC);
+    lcd.print(':');
+    if (now.minute()<10){
+      lcd.print("0");
+    }
+    lcd.print(now.minute(), DEC);
+    //lcd.print(':');
+    //lcd.print(now.second(), DEC);
+    lcd.print(" ");
+    if (tod == 1){
+      lcd.print("AM");
+    }
+    else{
+      lcd.print("PM");
+    }
+
+    lcd.setCursor(3, 1);
+    if (now.month() < 10){
+      lcd.print("0");
+    }
+
+    lcd.print(now.month(), DEC);
+    lcd.print('/');
+    lcd.print(now.day(), DEC);
+    lcd.print('/');
+    lcd.print(now.year(), DEC);
+
+    //tempTimer = 0;
+  }
+  else if (tempTimer == 200){
     tempTimer = 0;
   }
-
   motionLast = motion;
 }
 
